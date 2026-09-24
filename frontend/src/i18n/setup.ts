@@ -44,8 +44,14 @@ Object.entries(localeFiles).forEach(([path, module]) => {
 })
 
 const getStoredLanguage = (): string => {
+	let stored: string | null = null
 	try {
-		const stored = localStorage.getItem('altsendme-language')
+		stored = localStorage.getItem('altsendme-language')
+	} catch {
+		// Continue with browser-locale detection when storage is unavailable.
+	}
+
+	try {
 		const tag = (navigator.language || 'en').toLowerCase()
 		const keys = Object.keys(resources)
 		const pick = (t: string) => keys.find((k) => k.toLowerCase().startsWith(t))
